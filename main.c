@@ -12,6 +12,7 @@
 
 int proceed(char *in_file, int vector_len) {
     int data[vector_len];
+    memset(data, 0, vector_len);
     int buffer_len = 80;
     char line[buffer_len];
     FILE *in, *out;
@@ -45,11 +46,13 @@ int proceed(char *in_file, int vector_len) {
             }
             pch = strtok(NULL, " ");
         }
-//        for (i; i < vector_len; i++) {
-//            data[i] = 0;
-//        }
     }
     fclose(in);
+
+    for (i = 0; i < vector_len; i++) {
+        printf("%d ", data[i]);
+    }
+    printf("\n");
 
 //    int matrix[vector_len][vector_len];
     for (i = 0; i < vector_len; i++) {
@@ -73,7 +76,7 @@ int main(int argc, const char *argv[]) {
     files[0] = "kek.txt";
     files[1] = "kek2.txt";
 
-    int vector_len = 5;
+    int vector_len = 10;
 
 # pragma omp parallel for
     for (int i = 0; i < files_len; i++) {
