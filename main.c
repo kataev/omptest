@@ -10,30 +10,25 @@
 #include <unistd.h>
 #include <string.h>
 
-
-int procceed(char *in_file, int vector_len) {
+int proceed(char *in_file, int vector_len) {
     int data[vector_len];
     int buffer_len = 80;
     char line[buffer_len];
     FILE *in, *out;
 
-    char out_file;
+    char out_file[80] = "";
+    strcat(out_file, in_file);
+    strcat(out_file, ".out");
 
     if (access(in_file, F_OK) != -1) {
-        printf("file in exists\n");
+        printf("%s file in exists\n", in_file);
         in = fopen(in_file, "rt");
     } else {
-        printf("file in not exists\n");
+        printf("%s file in not exists\n", in_file);
         return 1;
     }
-
-    if (access(out_file, F_OK) != -1) {
-        printf("file out exists\n");
-        out = fopen(out_file, "wt");
-    } else {
-        printf("file out not exists\n");
-        return 1;
-    }
+    printf("out file: %s\n", out_file);
+    out = fopen(out_file, "wt");
 
     int i = 0;
     char *pch;
@@ -41,28 +36,28 @@ int procceed(char *in_file, int vector_len) {
         pch = strtok(line, " ");
         while (pch != NULL) {
             if (i > vector_len) {
-                printf("File size mismatch with array size");
+                printf("File size mismatch with array size\n");
                 return 1;
             }
             if (sscanf(pch, "%i", &data[i++]) == EOF) {
-                printf("Error with parse error");
+                printf("Error with parse error\n");
                 return 1;
             }
             pch = strtok(NULL, " ");
         }
-        for (i; i < vector_len; i++) {
-            data[i] = 0;
-        }
+//        for (i; i < vector_len; i++) {
+//            data[i] = 0;
+//        }
     }
     fclose(in);
 
-    int matrix[vector_len][vector_len];
+//    int matrix[vector_len][vector_len];
     for (i = 0; i < vector_len; i++) {
         for (int j = 0; j < vector_len; j++) {
-            matrix[i][j] = data[i] * data[j];
+            fprintf(out, "%d ", data[i] * data[j]);
         }
+        fprintf(out, "\n");
     }
-
 
     return 0;
 }
@@ -75,35 +70,15 @@ int main(int argc, const char *argv[]) {
 
     int files_len = 2;
     char *files[files_len];
-    files[0] = '/Users/pk/cprojects/omptest/kek.txt';
-    files[1] = '/Users/pk/cprojects/omptest/kek2.txt';
+    files[0] = "kek.txt";
+    files[1] = "kek2.txt";
 
-    int vector_len = 10;
-//    int data[vector_len];
+    int vector_len = 5;
 
-    for (int i = 0; i < files_len; i++){
-        if (!procceed(files[i], vector_len))
-            return 1;
+# pragma omp parallel for
+    for (int i = 0; i < files_len; i++) {
+        proceed(files[i], vector_len);
     }
-
-//    if (!procceed("kek.txt", vector_len, data))
-//        return 0;
-//    if (!procceed("kek2.txt", vector_len, data2))
-//        return 0;
-
-//
-//    printf("\ndata:\t");
-//
-//    for (int i = 0; i < vector_len; i++) {
-//        printf("%i ", data[i]);
-//    }
-
-//    for (int i = 0; i < vector_len; i++) {
-//        for (int j = 0; j < vector_len; j++) {
-//            printf("%i\t\t", matrix[i][j]);
-//        }
-//        printf("\n");
-//    }
 
     return 0;
 }
