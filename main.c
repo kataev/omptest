@@ -53,10 +53,10 @@ int proceed(char *in_file, int vector_len) {
         printf("%d ", data[i]);
     }
     printf("\n");
-
+    int j;
 //    int matrix[vector_len][vector_len];
     for (i = 0; i < vector_len; i++) {
-        for (int j = 0; j < vector_len; j++) {
+        for (j = 0; j < vector_len; j++) {
             fprintf(out, "%d ", data[i] * data[j]);
         }
         fprintf(out, "\n");
@@ -77,9 +77,9 @@ int main(int argc, const char *argv[]) {
     files[1] = "kek2.txt";
 
     int vector_len = 10;
-
+    int i;
 # pragma omp parallel for
-    for (int i = 0; i < files_len; i++) {
+    for (i = 0; i < files_len; i++) {
         proceed(files[i], vector_len);
     }
 

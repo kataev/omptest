@@ -7,7 +7,7 @@ FIND_PACKAGE(MPI REQUIRED)
 
 INCLUDE(FindCUDA)
 
-INCLUDE_DIRECTORIES(/usr/local/cuda/include ${MPI_INCLUDE_PATH})
+#INCLUDE_DIRECTORIES(/usr/local/cuda/include ${MPI_INCLUDE_PATH})
 
 FILE(GLOB SOURCES "*.cu" "*.cpp" "*.c" "*.h")
 set(SOURCE_FILES test.cu)
@@ -20,9 +20,8 @@ LIST(APPEND CUDA_NVCC_FLAGS --compiler-options -fno-strict-aliasing -lineinfo -u
 LIST(APPEND CUDA_NVCC_FLAGS -gencode arch=compute_20,code=sm_20)
 LIST(APPEND CUDA_NVCC_FLAGS -gencode arch=compute_30,code=sm_30)
 LIST(APPEND CUDA_NVCC_FLAGS -gencode arch=compute_35,code=sm_35)
-LIST(APPEND CUDA_NVCC_FLAGS -deviceemu)
 
-TARGET_LINK_LIBRARIES(omptest /usr/local/cuda/lib/libcudart.dylib ${MPI_LIBRARIES})
+TARGET_LINK_LIBRARIES(omptest /usr/lib/x86_64-linux-gnu/libcudart.so ${MPI_LIBRARIES})
 
 find_package(OpenMP REQUIRED)
 if (OPENMP_FOUND)
