@@ -7,12 +7,12 @@ FIND_PACKAGE(MPI REQUIRED)
 
 INCLUDE(FindCUDA)
 
-#INCLUDE_DIRECTORIES(/usr/local/cuda/include ${MPI_INCLUDE_PATH})
+INCLUDE_DIRECTORIES(/usr/local/cuda/include ${MPI_INCLUDE_PATH})
 
 FILE(GLOB SOURCES "*.cu" "*.cpp" "*.c" "*.h")
-set(SOURCE_FILES test.cu)
+set(SOURCE_FILES ex.cu)
 
-CUDA_ADD_EXECUTABLE(omptest ${SOURCES})
+CUDA_ADD_EXECUTABLE(omptest ${SOURCE_FILES})
 
 LIST(APPEND CMAKE_CXX_FLAGS "-std=c++0x -O3 -ffast-math -Wall")
 
@@ -28,6 +28,3 @@ if (OPENMP_FOUND)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 endif ()
-
-
-#add_executable(omptest ${SOURCE_FILES})
